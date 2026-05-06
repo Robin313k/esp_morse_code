@@ -1,0 +1,11 @@
+  --- Morse Code Info: --- 
+
+ Dash is three times longer than dot
+ when multiple dots and/or dashes 
+ -> leave gap of silence equivalent to the length of one dot between each dot/dash 
+
+ Pauses seperating entire letters leave a gap of silence equivalent to three dots/one dash
+
+ Pauses between two letters is 3 units (3 dots)
+ Pauses between two words is 7 units (7 dots)
+
