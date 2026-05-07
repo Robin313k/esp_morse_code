@@ -92,24 +92,9 @@ void decode_string(char* string, symbol* symbols, int count) {
 	}
 }
 
-void app_main(void)
-{
-	gpio_reset_pin(LED_PIN);
-	gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);
-
+void morse_code(char* string) {
 	int symbol_count = 50;
 	symbol* symbols = malloc(symbol_count * sizeof(symbol));
-
-	if (symbols != NULL) {
-		symbols[0].symbol = 'a';
-		symbols[0].morse_code = ".-";
-		symbols[1].symbol = 'b';
-		symbols[1].morse_code = "-...";
-		symbols[2].symbol = 'c';
-		symbols[2].morse_code = "-.-.";
-		symbols[3].symbol = 'd';
-		symbols[3].morse_code = "-..";
-	}
 
 	if (symbols != NULL) {
     		// Lowercase letters a-z
@@ -165,7 +150,7 @@ void app_main(void)
     		symbols[24].morse_code = "-.--";
     		symbols[25].symbol = 'z';
     		symbols[25].morse_code = "--..";
-
+	
     		// Digits 0-9
     		symbols[26].symbol = '0';
     		symbols[26].morse_code = "-----";
@@ -216,13 +201,27 @@ void app_main(void)
     		symbols[48].symbol = '-';
     		symbols[48].morse_code = "-....-";
     		symbols[49].symbol = '"';
-		symbols[49].morse_code = ".-..-.";
+			symbols[49].morse_code = ".-..-.";
     		symbols[50].symbol = '@';
     		symbols[50].morse_code = ".--.-.";
 	}
 
-	// can be put into a while(true) loop to keep the program running for an infinite amount of time
-	decode_string("Hello world!", symbols, symbol_count);
+	decode_string(string, symbols, symbol_count);
 
 	free(symbols);
+}
+
+void app_main(void)
+{
+	gpio_reset_pin(LED_PIN);
+	gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);
+
+	while(true) {
+		morse_code("Hello world!");
+		putchar('\n');
+		for (int i = 0; i < 10; i++) {
+			printf("ESP32 wil restart in %i seconds.\n", (10 - i));
+			vTaskDelay((1000) / portTICK_PERIOD_MS);
+		}
+	}
 }
