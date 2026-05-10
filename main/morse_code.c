@@ -30,7 +30,10 @@
 #include <freertos/task.h>
 #include <driver/gpio.h>
 
+#define USE_LED true
 #define LED_PIN 2
+#define USE_BUZZER false
+#define BUZZER_PIN 4
 #define TIME_LENGTH 400
 
 typedef struct {
@@ -39,16 +42,40 @@ typedef struct {
 } symbol;
 
 void dot() {
-	gpio_set_level(LED_PIN, 1);
+	if (USE_LED == true) {
+		gpio_set_level(LED_PIN, 1);
+	}
+	if (USE_BUZZER == true) {
+		gpio_set_level(BUZZER_PIN, 1);
+	}
+
 	vTaskDelay((1 * TIME_LENGTH) / portTICK_PERIOD_MS);
-	gpio_set_level(LED_PIN, 0);
+	
+	if (USE_LED == true) {
+		gpio_set_level(LED_PIN, 0);
+	}
+	if (USE_BUZZER == true) {
+		gpio_set_level(BUZZER_PIN, 0);
+	}
 }
 
 
 void dash() {
-	gpio_set_level(LED_PIN, 1);
+	if (USE_LED == true) {
+		gpio_set_level(LED_PIN, 1);
+	}
+	if (USE_BUZZER == true) {
+		gpio_set_level(BUZZER_PIN, 1);
+	}
+
 	vTaskDelay((3 * TIME_LENGTH) / portTICK_PERIOD_MS);
-	gpio_set_level(LED_PIN, 0);
+	
+	if (USE_LED == true) {
+		gpio_set_level(LED_PIN, 0);
+	}
+	if (USE_BUZZER == true) {
+		gpio_set_level(BUZZER_PIN, 0);
+	}
 }
 
 void execute_morse_code(const char* morse_code) {
@@ -150,7 +177,7 @@ void morse_code(char* string) {
     		symbols[24].morse_code = "-.--";
     		symbols[25].symbol = 'z';
     		symbols[25].morse_code = "--..";
-	
+
     		// Digits 0-9
     		symbols[26].symbol = '0';
     		symbols[26].morse_code = "-----";
@@ -172,7 +199,7 @@ void morse_code(char* string) {
     		symbols[34].morse_code = "---..";
     		symbols[35].symbol = '9';
     		symbols[35].morse_code = "----.";
-		
+
     		// Symbols
     		symbols[36].symbol = '.';
     		symbols[36].morse_code = ".-.-.-";
@@ -201,7 +228,7 @@ void morse_code(char* string) {
     		symbols[48].symbol = '-';
     		symbols[48].morse_code = "-....-";
     		symbols[49].symbol = '"';
-			symbols[49].morse_code = ".-..-.";
+            	symbols[49].morse_code = ".-..-.";
     		symbols[50].symbol = '@';
     		symbols[50].morse_code = ".--.-.";
 	}
@@ -215,6 +242,8 @@ void app_main(void)
 {
 	gpio_reset_pin(LED_PIN);
 	gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);
+	gpio_reset_pin(BUZZER_PIN);
+	gpio_set_direction(BUZZER_PIN, GPIO_MODE_OUTPUT);
 
 	while(true) {
 		morse_code("Hello world!");
